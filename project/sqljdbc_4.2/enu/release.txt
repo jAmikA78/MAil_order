@@ -1,0 +1,166 @@
+Release Information
+Microsoft JDBC Driver 4.2 for SQL Server
+February 2018
+
+------------
+INTRODUCTION
+------------
+This file contains late-breaking or other important information that supplements the Microsoft JDBC 
+Driver 4.2 for SQL Server documentation. You should read this file completely before installing 
+the JDBC driver.
+
+Your feedback is very important to us and we will strive to respond to your feedback in a timely 
+manner. For information about providing feedback by using the JDBC driver blogs and online forums, 
+see the Microsoft JDBC Driver 4.2 for SQL Server page at http://msdn.microsoft.com/data/jdbc.
+
+
+------------
+INSTALLATION
+------------
+Instructions for installing the JDBC driver are located in install.txt.  Refer to that file for 
+information about installing the JDBC driver on Windows and Unix operating systems.
+
+
+---------------------------
+SUPPORTED OPERATING SYSTEMS
+---------------------------
+Supported operating systems for Microsoft JDBC Driver 4.2 for SQL Server include:
+  Windows Server 2008 SP2
+  Windows Server 2008 R2 SP1
+  Windows Server 2012
+  Windows Server 2012 R2
+  Windows Vista SP2
+  Windows 7 SP1
+  Windows 8
+  Windows 8.1
+  Windows 10
+  Linux
+  Unix
+
+The list above is an example of some of the supported operating systems. The JDBC driver is designed 
+to work on any operating system that supports the use of a Java Virtual Machine (JVM). However, only 
+Oracle Solaris (x86), SUSE Linux, and Windows Vista Service Pack 2 or later operating systems have 
+been tested.
+
+
+----------------
+RELEASE CONTENTS
+----------------
+The Microsoft JDBC Driver 4.2 for SQL Server executable zip or tar file unpacks the following files 
+in the specified locations, relative to the selected installation directory:
+
+<installation directory>\sqljdbc_<version>\<language>\install.txt
+<installation directory>\sqljdbc_<version>\<language>\release.txt
+<installation directory>\sqljdbc_<version>\<language>\license.txt
+<installation directory>\sqljdbc_<version>\<language>\jre7\sqljdbc41.jar
+<installation directory>\sqljdbc_<version>\<language>\jre8\sqljdbc42.jar
+<installation directory>\sqljdbc_<version>\<language>\auth\x86\sqljdbc_auth.dll
+<installation directory>\sqljdbc_<version>\<language>\auth\x64\sqljdbc_auth.dll
+<installation directory>\sqljdbc_<version>\<language>\samples\<sample files...>
+<installation directory>\sqljdbc_<version>\<language>\xa\xa_install.sql
+<installation directory>\sqljdbc_<version>\<language>\xa\x86\sqljdbc_xa.dll
+<installation directory>\sqljdbc_<version>\<language>\xa\x64\sqljdbc_xa.dll
+
+For detailed information about each component please refer to the online documentation,
+Microsoft JDBC Driver for SQL Server Documentation: 
+https://msdn.microsoft.com/en-us/library/dn197850(v=sql.10).aspx
+
+Documentation:
+-------------
+This release information, installation instructions, and license terms are included in this package. 
+All other documentation may be found online.
+
+Please note that the offline helpfiles have been discontinued. Helpful hint: if you require offline 
+documentation, you may export the pages directly in MSDN - just look for the Export feature in the 
+upper right hand corner of your web browser.
+
+
+JAR Files:
+---------
+To support backward compatibility and possible upgrade scenarios, the JDBC Driver 4.2 includes 
+two JAR class libraries in each installation package: sqljdbc41.jar and sqljdbc42.jar.  
+
+
+Feature Specific Files:
+---------
+Integrated Authentication (on Windows) components are included in the auth directory.
+
+JDBC distributed transaction components are included in the xa directory.
+
+
+Samples:
+-------
+Sample applications that demonstrate various features of the JDBC driver are included in the samples
+directory. For more details about each sample and how to run them, please refer to the online 
+documentation.
+
+
+-----------
+CHANGE LIST
+-----------
+Changes from 4.2.8112.100 to 4.2.8112.200
+
+Change in compiler to mitigate vulnerabilities related to Spectre and Meltdown.
+
+-----------------------------------------
+Changes from 4.2.6225.100 to 4.2.8112.100
+
+Fixed issue where LOGIN7 packet did not contain the drivers version number.
+
+Fixed an issue in sqljdbc_xa.dll where transactions may cause handle leak to occur in SQL Server.
+
+------------------------
+Changes from 4.1 to 4.2:
+
+The JDBC driver now supports Java Development Kit (JDK) version 8 and includes a new jar file, 
+sqljdbc42.jar, that is compliant with the JDBC 4.2 API.
+
+The sqljdbc41.jar has been upgraded to be compliant with the JDBC 4.1 API.
+
+Enhanced control of timeout settings for rolling back XA transactions
+
+Updated how an SSL certificate is validated when redirection occurs in Azure
+
+Added a serverSpn connection property to allow flexibility in specifying Kerberos principals (and 
+allow cross-realm connections when the client's default realm is not the same as the server).
+
+New Feature: Bulk Copy - Application developers can now write code solutions in Java to quickly 
+bulk copy large amounts of data into SQL Server from any data source that can be read with a 
+ResultSet instance or from a CSV file.
+
+
+
+------------
+KNOWN ISSUES
+------------
+The following are known issues with the Microsoft JDBC Driver 4.2 for SQL Server:
+
+1) PARAMETER METADATA LIMITATIONS WITH THE SQL MERGE STATEMENT
+
+PreparedStatement.getParameterMetadata() throws an SQLException when used
+with a parameterized MERGE query.
+
+
+2) JavaKerberos and IBM VMs
+
+If you are running under Windows environments you may have to specify the principalname in the 
+configuration file to get the Java Kerberos working. For example: 
+SQLJDBCDriver {
+  com.ibm.security.auth.module.Krb5LoginModule required
+  seDefaultCcache=true
+  credsType=initiator
+  principal=principalname@principaldomain;
+};
+
+
+3) CONNECTION DROPPING WITH SQL AZURE
+
+When connecting to SQL Azure, idle connections may be terminated by a network component (such as a 
+firewall) after a period of inactivity. To avoid dropping idle connections by a network component, 
+the following registry settings (or their non-Windows equivalents) should be set on the operating 
+system where the driver is loaded:
+           
+Registry Setting                                                                   Recommended value
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\KeepAliveTime            30000
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\KeepAliveInterval         1000
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\TcpMaxDataRetransmission  10
